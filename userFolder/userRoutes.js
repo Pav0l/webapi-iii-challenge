@@ -1,7 +1,9 @@
 const express = require('express');
+const md = require('../middleware/middleware');
 const Users = require('./userDb');
 
 const routes = express.Router();
+const upperCaseUsername = md.upperCaseUsername;
 
 // Initialize the req.body object
 routes.use(express.json());
@@ -30,7 +32,7 @@ routes.get('/:id', async (req, res, next) => {
   }
 });
 
-routes.post('/', async (req, res, next) => {
+routes.post('/',upperCaseUsername, async (req, res, next) => {
   if (req.body.name) {
     try {
       const users = await Users.insert(req.body);
@@ -57,7 +59,7 @@ routes.delete('/:id', async (req, res, next) => {
   }
 });
 
-routes.put('/:id', async (req, res, next) => {
+routes.put('/:id',upperCaseUsername, async (req, res, next) => {
   const { id } = req.params;
   if (req.body.name) {
     try {
