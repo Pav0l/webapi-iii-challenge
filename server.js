@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoute = require('./userFolder/userRoutes');
 const postRoute = require('./postFolder/postRoutes');
+const Errors = require('./middleware/error');
 
 const app = express();
 // routes URL
@@ -11,5 +12,5 @@ const postUrl = '/api/posts';
 app.use(userUrl, userRoute);
 app.use(postUrl, postRoute);
 
-
+app.use(Errors.errorHandler);
 module.exports = app;
