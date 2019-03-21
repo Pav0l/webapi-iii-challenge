@@ -40,7 +40,6 @@ routes.post('/', async (req, res, next) => {
       next("Server Error. Could not create new post.");
     }
   } else {
-    // res.status(400).json({ message: "Please provide text and user_id for the post." });
     next({ status: 400, message: "Please provide text and user_id for the post." });
   }
 });
@@ -52,7 +51,6 @@ routes.delete('/:id', async (req, res, next) => {
     if (deletedPost > 0) {
       res.status(200).json({ message: `Post with ID ${id} was deleted.` });
     } else {
-      // res.status(404).json({ message: `Post with ID ${id} does not exist` });
       next({ status: 404, message: `Post with ID ${id} does not exist` });
     }
   } catch {
@@ -70,14 +68,12 @@ routes.put('/:id', async (req, res, next) => {
       if (updatedPost > 0) {
         res.status(200).json({ message: `Post with ID ${id} was edited.` });
       } else {
-        // res.status(404).json({ message: `Post with ID ${id} does not exist` });
         next({ status: 404, message: `Post with ID ${id} does not exist` });
       }
     } catch {
       next("Server Error. Post information could not be retrieved.");
     }
   } else {
-    // res.status(400).json({ message: "Please provide text for the post." });
     next({ status: 400, message: "Please provide text for the post." });
   }
 });

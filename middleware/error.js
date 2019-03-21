@@ -1,3 +1,4 @@
+// Server error responses middleware
 function serverError(err, req, res, next) {
   if (err.status) {
     next();
@@ -9,7 +10,7 @@ function serverError(err, req, res, next) {
   }
 }
 
-// custom error handler for other than server errors
+// Middleware for Client error responses
 function clientError(err, req, res, next) {
   const { status, message } = err;
   if (status === 500) {
