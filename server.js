@@ -12,5 +12,5 @@ const postUrl = '/api/posts';
 app.use(userUrl, userRoute);
 app.use(postUrl, postRoute);
 
-app.use(Errors.errorHandler);
+app.use(Errors.serverError);
 module.exports = app;

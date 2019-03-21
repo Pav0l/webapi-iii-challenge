@@ -1,20 +1,28 @@
-function errorHandler(err, req, res, next) {
-  res.status(500).json({
-    error: 'I\'m sorry, we couldn\'t retreive your data',
-    message: err,
-  });
+function serverError(err, req, res, next) {
+  if (err.status) {
+    next();
+  } else {
+    res.status(500).json({
+      error: 'I\'m sorry, we couldn\'t retreive your data',
+      message: err,
+    });
+  }
 }
 
-// function userError(err, req, res, next) {
-//   const { status, message } = err;
-//   res.status(status).json({
-//     error: 'I\'m sorry, we couldn\'t retreive your data',
-//     message,
-//   });
-// }
+// custom error handler for other than server errors
+function clientError(err, req, res, next) {
+  const { status, message } = err;
+  if (status === 500) {
+    next();
+  } else {
+    res.status(status).json({
+      message,
+    });
+  }
+}
 
 
 module.exports = {
-  errorHandler,
-  // userError,
+  serverError,
+  clientError,
 };

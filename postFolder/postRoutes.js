@@ -1,5 +1,6 @@
 const express = require('express');
 const Posts = require('./postDb');
+const Errors = require('../middleware/error');
 
 const routes = express.Router();
 
@@ -22,7 +23,8 @@ routes.get('/:id', async (req, res, next) => {
     if (post) {
       res.status(200).json(post);
     } else {
-      res.status(404).json({ error: "Post with this ID does not exist" });
+      // res.status(404).json({ error: `Post with ID ${id} does not exist` });
+      next({ status: 404, message: `Post with ID ${id} does not exist` });
     }
   } catch {
     next("Server Error. Post information could not be retrieved.");
@@ -38,7 +40,8 @@ routes.post('/', async (req, res, next) => {
       next("Server Error. Could not create new post.");
     }
   } else {
-    res.status(400).json({ error: "Please provide text and user_id for the post." })
+    // res.status(400).json({ message: "Please provide text and user_id for the post." });
+    next({ status: 400, message: "Please provide text and user_id for the post." });
   }
 });
 
@@ -49,7 +52,8 @@ routes.delete('/:id', async (req, res, next) => {
     if (deletedPost > 0) {
       res.status(200).json({ message: `Post with ID ${id} was deleted.` });
     } else {
-      res.status(404).json({ error: `Post with ID ${id} does not exist` });
+      // res.status(404).json({ message: `Post with ID ${id} does not exist` });
+      next({ status: 404, message: `Post with ID ${id} does not exist` });
     }
   } catch {
     next("Server Error. Post information could not be retrieved.");
@@ -66,15 +70,19 @@ routes.put('/:id', async (req, res, next) => {
       if (updatedPost > 0) {
         res.status(200).json({ message: `Post with ID ${id} was edited.` });
       } else {
-        res.status(404).json({ error: `Post with ID ${id} does not exist` });
+        // res.status(404).json({ message: `Post with ID ${id} does not exist` });
+        next({ status: 404, message: `Post with ID ${id} does not exist` });
       }
     } catch {
       next("Server Error. Post information could not be retrieved.");
     }
   } else {
-    res.status(400).json({ error: "Please provide text for the post." })
+    // res.status(400).json({ message: "Please provide text for the post." });
+    next({ status: 400, message: "Please provide text for the post." });
   }
 });
 
+// custom middleware to handle client error responses (status code 400+)
+routes.use(Errors.clientError);
 
 module.exports = routes;
